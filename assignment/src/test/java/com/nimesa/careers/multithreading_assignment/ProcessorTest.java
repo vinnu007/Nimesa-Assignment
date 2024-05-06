@@ -14,11 +14,10 @@ class ProcessorTest {
 
     @Test
     public void testProcess() throws InterruptedException {
-        List<TaskRequest> jobList = getJobList(8);
-        Processor processor = new Processor(jobList);
-        List<TaskResponse> execute = processor.execute();
-        for (TaskResponse taskResponse : execute) {
-            System.out.println(taskResponse.getId()+" completed "+taskResponse.getStatus());
+        List<TaskRequest> jobList = getJobList(10);
+        Processor processor = new Processor();
+        for (TaskRequest taskRequest : jobList) {
+            processor.execute(taskRequest);
         }
     }
 
