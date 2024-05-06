@@ -1,9 +1,7 @@
 package com.nimesa.careers.multithreading_assignment;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Processor {
 
@@ -17,10 +15,10 @@ public class Processor {
     }
 
     public TaskResponse execute(TaskRequest taskRequest) throws InterruptedException {
-        System.out.println("Starting Task " + taskRequest.getId());
+        System.out.println("Starting Task by " + taskRequest.getSubmittedBy()+ " with type as: "+taskRequest.getType());
         Task task = new Task(taskRequest);
         TaskResponse response = task.run();
-        System.out.println("Completed Task " + response.getId() + "With Status " + response.getStatus());
+        System.out.println("Completed Task by " + response.getSubmittedBy() + " With Status: " + response.getStatus()+ " with type as: "+response.getType());
         return response;
     }
 }

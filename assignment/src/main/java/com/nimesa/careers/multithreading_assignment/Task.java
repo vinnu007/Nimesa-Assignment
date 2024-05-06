@@ -9,8 +9,10 @@ public class Task {
     public TaskResponse run() throws InterruptedException {
 
         int size = taskRequest.getSize();
+//        System.out.println("Before Sleep : "+taskRequest.getId() +" with Size: "+size);
         Thread.sleep(size*1000);
-        return new TaskResponse(taskRequest.getId(),Status.SUCCESS);
+//        System.out.println("After Sleep : "+taskRequest.getId());
+        return new TaskResponse(taskRequest.getId(),taskRequest.getSubmittedBy(),Status.SUCCESS, taskRequest.getType());
     }
 
 }

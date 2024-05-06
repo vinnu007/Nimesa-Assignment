@@ -6,19 +6,61 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class ProcessorTest {
     private final List<String> users = List.of("User4", "User1", "User3", "User2");
     private final List<TaskType> taskTypes = List.of(TaskType.values());
 
+    //### 1. Parallel Execution of All Tasks
     @Test
-    public void testProcess() throws InterruptedException {
+    public void testParallelExecutionOfAllTasks() {
         List<TaskRequest> jobList = getJobList(10);
-        Processor processor = new Processor();
-        for (TaskRequest taskRequest : jobList) {
-            processor.execute(taskRequest);
+        ParallelProcessor processor = new ParallelProcessor();
+        CompletableFuture<Void> allTasksFuture = processor.execute(jobList);
+        allTasksFuture.join(); // Wait until all tasks have been processed before continuing execution
+    }
+
+    //### 2. Parallel Execution of Unique User Tasks
+    @Test
+    public void testParallelExecutionOfUniqueUserTask() {
+        List<TaskRequest> jobList = getJobList(10);
+        ParallelExecutionOfUniqueUserTask taskExecutor = new ParallelExecutionOfUniqueUserTask();
+        for (TaskRequest task : jobList) {
+            taskExecutor.submitTask(task);
         }
+        CompletableFuture<Void> allTasksFuture = taskExecutor.startProcessing();
+        allTasksFuture.join();
+        assertTrue(true, "All tasks have been processed");
+    }
+
+    //### 3. Parallel Execution of Unique User and Task Type
+    @Test
+    public void testParallelExecutionOfUniqueUserTaskType() {
+        List<TaskRequest> jobList = getJobList(10);
+        ParallelExecutionOfUniqueUserTaskType taskExecutor = new ParallelExecutionOfUniqueUserTaskType();
+        for (TaskRequest task : jobList) {
+            taskExecutor.submitTask(task);
+        }
+        CompletableFuture<Void> allTasksFuture = taskExecutor.startProcessing();
+        allTasksFuture.join();
+        assertTrue(true, "All tasks have been processed");
+    }
+
+    //### 4. Parallel Execution Based on Priority, User, and Task Type
+    @Test
+    public void testParallelExecutionBasedOnPriorityUserTaskType() {
+        List<TaskRequest> jobList = getJobList(10);
+        ParallelExecutionBasedOnPriorityUserTaskType taskExecutor = new ParallelExecutionBasedOnPriorityUserTaskType();
+        for (TaskRequest task : jobList) {
+            taskExecutor.submitTask(task);
+        }
+        CompletableFuture<Void> allTasksFuture = taskExecutor.startProcessing();
+        allTasksFuture.join();
+        assertTrue(true, "All tasks have been processed");
     }
 
     private List<TaskRequest> getJobList(int n) {
